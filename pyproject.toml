@@ -1,0 +1,21 @@
+[project]
+name = "community-tulip-api"
+version = "1.0.1"
+authors = [
+  { name="Henry Jones", email="henryivesjones@tulip.co" },
+]
+description = "A community wrapper for the Tulip API"
+readme = "README.md"
+requires-python = ">=3.5"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/henryivesjones/community-tulip-api"
+"Bug Tracker" = "https://github.com/henryivesjones/community-tulip-api/issues"
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
