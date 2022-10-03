@@ -9,7 +9,7 @@ def read(fname):
 
 setup(
     name="community-tulip-api",
-    version="0.1.1",
+    version="0.1.2",
     author="Henry Jones",
     author_email="henryivesjones@gmail.com",
     description="A community wrapper for the Tulip API",

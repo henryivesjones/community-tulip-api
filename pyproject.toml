@@ -1,12 +1,12 @@
 [project]
 name = "community-tulip-api"
-version = "1.0.1"
+version = "0.1.2"
 authors = [
   { name="Henry Jones", email="henryivesjones@tulip.co" },
 ]
 description = "A community wrapper for the Tulip API"
 readme = "README.md"
-requires-python = ">=3.5"
+requires-python = ">=3.6"
 classifiers = [
     "Programming Language :: Python :: 3",
     "Operating System :: OS Independent",
