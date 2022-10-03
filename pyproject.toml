@@ -6,10 +6,19 @@ authors = [
 ]
 description = "A community wrapper for the Tulip API"
 readme = "README.md"
+license = {file = "LICENSE"}
 requires-python = ">=3.6"
+dependencies = [
+    "requests",
+]
 classifiers = [
     "Programming Language :: Python :: 3",
     "Operating System :: OS Independent",
+]
+
+keywords = [
+  "tulip",
+  "api",
 ]
 
 [project.urls]

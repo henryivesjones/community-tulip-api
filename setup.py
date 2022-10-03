@@ -9,12 +9,9 @@ def read(fname):
 
 setup(
     name="community-tulip-api",
-    version="0.1.2",
     author="Henry Jones",
     author_email="henryivesjones@gmail.com",
     description="A community wrapper for the Tulip API",
-    license="GPLv3",
-    keywords="tulip api",
     url="https://github.com/henryivesjones/community-tulip-api",
     packages=["tulip_api"],
     package_dir={"tulip_api": "tulip_api"},
