@@ -259,6 +259,19 @@ class TulipTable:
             self._construct_record_path(record_id), "DELETE"
         )
 
+    def delete_records(self, allow_records_in_use=False):
+        """
+        DELETE `/tables/{tableId}/records`
+
+        Deletes all records from a Tulip Table.
+        """
+        # lowercase boolean because the api doesn't like capitalized booleans.
+        self.tulip_api.make_request_expect_nothing(
+            self._construct_records_path(),
+            "DELETE",
+            params={"allowRecordsInUse": "true" if allow_records_in_use else "false"},
+        )
+
     def increment_record_column(self, record_id: str, column_id: str, value: int):
         """
         PATCH `/tables/{tableId}/records/{recordId}/increment`
