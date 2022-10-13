@@ -25,9 +25,12 @@ class TulipAPI:
         api_key: Union[str, None] = None,
         api_key_secret: Union[str, None] = None,
         auth: Union[str, None] = None,
+        use_full_url: bool = False,
     ):
-        self.host = self._construct_base_url(tulip_url)
-        self.fqdn = tulip_url
+        """
+        use_full_url: if set to true, the tulip_url must include `http://` or `https://` as well as the fqdn. For example `https://abc.tulip.co`
+        """
+        self.host = self._construct_base_url(tulip_url, use_full_url)
 
         self.auth = TulipAPI._provide_api_credentials(
             api_key=api_key, api_key_secret=api_key_secret, auth=auth
@@ -93,7 +96,9 @@ class TulipAPI:
         raise TulipAPINoCredentialsFound()
 
     @staticmethod
-    def _construct_base_url(host):
+    def _construct_base_url(host, use_full_url):
+        if use_full_url:
+            return f"{host}/api/v3"
         cleaned_host = host.replace("http://", "").replace("https://", "")
         return f"https://{cleaned_host}/api/v3/"
 

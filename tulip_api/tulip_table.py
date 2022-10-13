@@ -1,7 +1,12 @@
+import json
 from typing import Any, Dict, Generator, Iterable, List, Union
 from uuid import uuid4
 
-from .exceptions import TulipAPIInvalidChunkSize, TulipApiTableRecordCreateMustIncludeID
+from .exceptions import (
+    TulipAPIInvalidChunkSize,
+    TulipAPIMalformedRequestError,
+    TulipApiTableRecordCreateMustIncludeID,
+)
 from .tulip_api import TulipAPI
 
 
@@ -203,6 +208,34 @@ class TulipTable:
         return self.tulip_api.make_request(
             self._construct_records_path(), "POST", json=record
         )
+
+    def create_records(
+        self, records: Iterable[dict], create_random_id=False, warn_on_failure=False
+    ) -> int:
+        """
+        Iterates over a list of records and creates them. Calling `create_record`
+
+        Returns the # of successfully created records.
+
+        `warn_on_failure`: set to True if you want to continue with creating the rest of the records
+        , despite a malformed request.
+
+        """
+        created_records = 0
+        failed_records = 0
+        for record in records:
+            try:
+                self.create_record(record, create_random_id=create_random_id)
+                created_records += 1
+            except TulipAPIMalformedRequestError as exception:
+                failed_records += 1
+                print(f"There was an issue creating the record:\n{json.dumps(record)}")
+                if not warn_on_failure:
+                    raise exception
+        if warn_on_failure and failed_records > 0:
+            print(f"Failed to create {failed_records} records.")
+
+        return created_records
 
     def update_record(self, record_id: str, record: dict = {}):
         """
