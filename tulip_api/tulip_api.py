@@ -4,7 +4,7 @@ from typing import Any, List, Tuple, Union
 
 import requests
 
-from .exceptions import (
+from tulip_api.exceptions import (
     TulipAPIAuthorizationError,
     TulipAPIInternalError,
     TulipAPIMalformedRequestError,

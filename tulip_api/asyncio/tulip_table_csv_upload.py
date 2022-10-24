@@ -3,7 +3,7 @@ from typing import Any, Dict, Iterable, TextIO, Union
 
 from dateutil import parser
 
-from tulip_api.tulip_table import TulipTable
+from tulip_api.asyncio.tulip_table import TulipTable
 
 
 class TulipTableCSVUploader:
@@ -13,32 +13,32 @@ class TulipTableCSVUploader:
         self.tulip_table = tulip_table
         self.csv_file = csv_file
 
-    def execute(self, create_random_id=False, warn_on_failure=False) -> int:
+    async def execute(self, create_random_id=False, warn_on_failure=False) -> int:
         if isinstance(self.csv_file, str):
             with open(self.csv_file, "r") as csv_file:
-                return self._upload_records(
+                return await self._upload_records(
                     csv_file,
                     create_random_id=create_random_id,
                     warn_on_failure=warn_on_failure,
                 )
 
-        return self._upload_records(
+        return await self._upload_records(
             self.csv_file,
             create_random_id=create_random_id,
             warn_on_failure=warn_on_failure,
         )
 
-    def _upload_records(
+    async def _upload_records(
         self, file: TextIO, create_random_id=False, warn_on_failure=False
     ):
-        table_columns = self.tulip_table.get_details()["columns"]
+        table_columns = (await self.tulip_table.get_details())["columns"]
         column_types = {
             column["name"]: column["dataType"]["type"] for column in table_columns
         }
         reader = DictReader(file)
         TulipTableCSVUploader._validate_csv_columns(reader.fieldnames, column_types)
 
-        return self.tulip_table.create_records(
+        return await self.tulip_table.create_records(
             TulipTableCSVUploader._yield_coerced_records(reader, column_types),
             warn_on_failure=warn_on_failure,
             create_random_id=create_random_id,

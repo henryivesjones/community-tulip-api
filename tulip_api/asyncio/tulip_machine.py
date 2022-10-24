@@ -1,6 +1,6 @@
 from typing import Any, Dict
 
-from tulip_api.tulip_api import TulipAPI
+from tulip_api.asyncio.tulip_api import TulipAPI
 
 
 class TulipMachine:
@@ -14,7 +14,7 @@ class TulipMachine:
         self.tulip_api = tulip_api
         self.machine_id = machine_id
 
-    def send_event(self, attributes: Dict[str, Any]):
+    async def send_event(self, attributes: Dict[str, Any]):
         """
         POST `/attributes/report`
 
@@ -26,7 +26,7 @@ class TulipMachine:
         }
         ```
         """
-        self.tulip_api.make_request_expect_nothing(
+        await self.tulip_api.make_request_expect_nothing(
             TulipMachine.attributes_report_path,
             "POST",
             json=self._construct_attributes(attributes),

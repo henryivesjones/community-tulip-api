@@ -1,4 +1,4 @@
-from .tulip_api import TulipAPI
+from tulip_api.tulip_api import TulipAPI
 
 
 class TulipTableLink:

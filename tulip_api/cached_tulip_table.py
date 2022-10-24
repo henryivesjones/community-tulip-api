@@ -1,11 +1,11 @@
 from typing import Dict, List
 
-from .exceptions import (
+from tulip_api.exceptions import (
     TulipAPICachedTableDuplicateIDFound,
     TulipApiCachedTableRecordNotFound,
 )
-from .tulip_api import TulipAPI
-from .tulip_table import TulipTable
+from tulip_api.tulip_api import TulipAPI
+from tulip_api.tulip_table import TulipTable
 
 
 class CachedTulipTable:

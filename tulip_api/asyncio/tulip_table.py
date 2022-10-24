@@ -1,11 +1,10 @@
-import json
-from typing import Any, AsyncGenerator, Dict, Generator, Iterable, List, Union
+import asyncio
+from typing import Any, AsyncGenerator, Iterable, List, Union
 from uuid import uuid4
 
 from tulip_api.asyncio import TulipAPI
 from tulip_api.exceptions import (
     TulipAPIInvalidChunkSize,
-    TulipAPIMalformedRequestError,
     TulipApiTableRecordCreateMustIncludeID,
 )
 
@@ -223,15 +222,24 @@ class TulipTable:
         """
         created_records = 0
         failed_records = 0
+        futures: List[asyncio.Task] = []
         for record in records:
+            futures.append(
+                asyncio.create_task(
+                    self.create_record(record, create_random_id=create_random_id)
+                )
+            )
+
+        for future in asyncio.as_completed(futures):
             try:
-                await self.create_record(record, create_random_id=create_random_id)
+                await future
                 created_records += 1
-            except TulipAPIMalformedRequestError as exception:
+            except Exception as e:
                 failed_records += 1
-                print(f"There was an issue creating the record:\n{json.dumps(record)}")
+                print("There was an issue creating a record")
                 if not warn_on_failure:
-                    raise exception
+                    raise e
+
         if warn_on_failure and failed_records > 0:
             print(f"Failed to create {failed_records} records.")
 

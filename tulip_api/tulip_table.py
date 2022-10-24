@@ -2,12 +2,12 @@ import json
 from typing import Any, Dict, Generator, Iterable, List, Union
 from uuid import uuid4
 
-from .exceptions import (
+from tulip_api.exceptions import (
     TulipAPIInvalidChunkSize,
     TulipAPIMalformedRequestError,
     TulipApiTableRecordCreateMustIncludeID,
 )
-from .tulip_api import TulipAPI
+from tulip_api.tulip_api import TulipAPI
 
 
 class TulipTable:

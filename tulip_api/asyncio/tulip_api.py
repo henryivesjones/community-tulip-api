@@ -12,6 +12,7 @@ from tulip_api.exceptions import (
     TulipAPIAsyncUnknownResponse,
     TulipAPINoCredentialsFound,
 )
+from tulip_api.tulip_api import TulipAPIResponseCodes
 
 
 class TulipAPI:
@@ -24,6 +25,7 @@ class TulipAPI:
     def __init__(
         self,
         tulip_url: str,
+        concurrency: int = 40,
         api_key: Union[str, None] = None,
         api_key_secret: Union[str, None] = None,
         auth: Union[str, None] = None,
@@ -39,23 +41,14 @@ class TulipAPI:
         )
 
         self.headers = self._construct_headers()
-        # self.session = aiohttp.ClientSession()
+        self.concurrency = concurrency
 
-    # async def _make_request(
-    #     self,
-    #     path: str,
-    #     method: str,
-    #     params: Union[dict, None] = None,
-    #     json: Any = None,
-    # ):
-    #     async with aiohttp.request(
-    #         method,
-    #         self._construct_url(path),
-    #         params=params,
-    #         json=json,
-    #         headers=self.headers,
-    #     ) as response:
-    #         return self._handle_api_response(response)
+    def __enter__(self):
+        self.connector = aiohttp.TCPConnector(limit=self.concurrency)
+        return self
+
+    def __exit__(self, _, __, ___):
+        self.connector.close()
 
     async def make_request(
         self,
@@ -73,6 +66,7 @@ class TulipAPI:
             params=params,
             json=json,
             headers=self.headers,
+            connector=self.connector,
         ) as response:
             return await self._handle_api_response(response).json()
 
@@ -136,11 +130,3 @@ class TulipAPI:
         if response.status in TulipAPIResponseCodes.UNEXCPECTED_ERROR_CODES:
             raise TulipAPIAsyncInternalError(response)
         raise TulipAPIAsyncUnknownResponse(response)
-
-
-class TulipAPIResponseCodes:
-    SUCCESS_CODES = {200, 201, 204}
-    MALFORMED_CODES = {400, 422}
-    NOT_FOUND_CODES = {404}
-    UNAUTHENTICATED_CODES = {401, 403}
-    UNEXCPECTED_ERROR_CODES = {500}
