@@ -236,7 +236,7 @@ class TulipTable:
                 created_records += 1
             except Exception as e:
                 failed_records += 1
-                print("There was an issue creating a record")
+                print(f"There was an issue creating a record\n{e}")
                 if not warn_on_failure:
                     raise e
 

@@ -105,9 +105,7 @@ class TulipAPIAsyncInternalError(BaseTulipAPIException):
     def __init__(self, response: aiohttp.ClientResponse):
         self.message = (
             f"The {response.method} request to {response.url} resulted in an internal error.\n"
-            f"Response status code: {response.status}.\n"
-            "Request Body:\n"
-            f"{response.content}"
+            f"Response status code: {response.status}."
         )
         super().__init__(self.message)
 
