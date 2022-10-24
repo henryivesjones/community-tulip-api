@@ -1,3 +1,4 @@
+import aiohttp
 import requests
 
 
@@ -24,6 +25,17 @@ class TulipAPIAuthorizationError(BaseTulipAPIException):
         super().__init__(self.message)
 
 
+class TulipAPIAsyncAuthorizationError(BaseTulipAPIException):
+    """The given credentials were unable to authenticate with the tulip instance."""
+
+    def __init__(self, response: aiohttp.ClientResponse):
+        self.message = (
+            f"The {response.method} request to {response.url} was not able to authenticate using the given credentials.\n"
+            f"Response status code: {response.status}."
+        )
+        super().__init__(self.message)
+
+
 class TulipAPIConnectionError(BaseTulipAPIException):
     """Unable to connect to the given tulip instance."""
 
@@ -41,6 +53,17 @@ class TulipAPIMalformedRequestError(BaseTulipAPIException):
         super().__init__(self.message)
 
 
+class TulipAPIAsyncMalformedRequestError(BaseTulipAPIException):
+    """The request was malformed"""
+
+    def __init__(self, response: aiohttp.ClientResponse):
+        self.message = (
+            f"The {response.method} request to {response.url} was malformed.\n"
+            f"Response status code: {response.status}."
+        )
+        super().__init__(self.message)
+
+
 class TulipAPINotFoundError(BaseTulipAPIException):
     """The requested resource was not found"""
 
@@ -48,6 +71,17 @@ class TulipAPINotFoundError(BaseTulipAPIException):
         self.message = (
             f"The {response.request.method} request to {response.url} did not find the requested resource.\n"
             f"Response status code: {response.status_code}."
+        )
+        super().__init__(self.message)
+
+
+class TulipAPIAsyncNotFoundError(BaseTulipAPIException):
+    """The requested resource was not found"""
+
+    def __init__(self, response: aiohttp.ClientResponse):
+        self.message = (
+            f"The {response.method} request to {response.url} did not find the requested resource.\n"
+            f"Response status code: {response.status}."
         )
         super().__init__(self.message)
 
@@ -65,6 +99,19 @@ class TulipAPIInternalError(BaseTulipAPIException):
         super().__init__(self.message)
 
 
+class TulipAPIAsyncInternalError(BaseTulipAPIException):
+    """The requested resource was not found"""
+
+    def __init__(self, response: aiohttp.ClientResponse):
+        self.message = (
+            f"The {response.method} request to {response.url} resulted in an internal error.\n"
+            f"Response status code: {response.status}.\n"
+            "Request Body:\n"
+            f"{response.content}"
+        )
+        super().__init__(self.message)
+
+
 class TulipAPIUnknownResponse(BaseTulipAPIException):
     """The requested resource was not found"""
 
@@ -72,6 +119,17 @@ class TulipAPIUnknownResponse(BaseTulipAPIException):
         self.message = (
             f"The {response.request.method} request to {response.url} resulted in an unknown response.\n"
             f"Response status code: {response.status_code}."
+        )
+        super().__init__(self.message)
+
+
+class TulipAPIAsyncUnknownResponse(BaseTulipAPIException):
+    """The requested resource was not found"""
+
+    def __init__(self, response: aiohttp.ClientResponse):
+        self.message = (
+            f"The {response.method} request to {response.url} resulted in an unknown response.\n"
+            f"Response status code: {response.status}."
         )
         super().__init__(self.message)
 

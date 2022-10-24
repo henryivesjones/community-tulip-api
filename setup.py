@@ -13,9 +13,9 @@ setup(
     author_email="henryivesjones@gmail.com",
     description="A community wrapper for the Tulip API",
     url="https://github.com/henryivesjones/community-tulip-api",
-    packages=["tulip_api"],
-    package_dir={"tulip_api": "tulip_api"},
-    install_requires=["requests"],
+    packages=["tulip_api", "tulip_api.asyncio"],
+    package_dir={"tulip_api": "tulip_api", "tulip_api.asyncio": "tulip_api/asyncio"},
+    install_requires=["requests", "aiohttp", "python-dateutil"],
     long_description=read("README.md"),
     classifiers=[
         "Development Status :: 4 - Beta",

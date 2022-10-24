@@ -1,6 +1,6 @@
 [project]
 name = "community-tulip-api"
-version = "0.1.5"
+version = "0.1.6"
 authors = [
   { name="Henry Jones", email="henryivesjones@tulip.co" },
 ]
@@ -10,7 +10,8 @@ license = {file = "LICENSE"}
 requires-python = ">=3.6"
 dependencies = [
     "requests",
-    "python-dateutil"
+    "python-dateutil",
+    "aiohttp"
 ]
 classifiers = [
     "Programming Language :: Python :: 3",
