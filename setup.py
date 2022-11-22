@@ -15,6 +15,8 @@ setup(
     url="https://github.com/henryivesjones/community-tulip-api",
     packages=["tulip_api", "tulip_api.asyncio"],
     package_dir={"tulip_api": "tulip_api", "tulip_api.asyncio": "tulip_api/asyncio"},
+    package_data={"tulip_api": ["py.typed"], "tulip_api.asyncio": ["py.typed"]},
+    include_package_data=True,
     install_requires=["requests", "aiohttp", "python-dateutil"],
     long_description=read("README.md"),
     classifiers=[

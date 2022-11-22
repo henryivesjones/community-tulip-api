@@ -1,6 +1,6 @@
 import os
 from base64 import b64encode
-from typing import Any, List, Tuple, Union
+from typing import Any, List, Optional, Tuple, Union
 
 import requests
 
@@ -22,14 +22,17 @@ class TulipAPI:
     def __init__(
         self,
         tulip_url: str,
-        api_key: Union[str, None] = None,
-        api_key_secret: Union[str, None] = None,
-        auth: Union[str, None] = None,
+        api_key: Optional[str] = None,
+        api_key_secret: Optional[str] = None,
+        auth: Optional[str] = None,
         use_full_url: bool = False,
+        request_timeout: Optional[int] = 60,
     ):
         """
         use_full_url: if set to true, the tulip_url must include `http://` or `https://` as well as the fqdn. For example `https://abc.tulip.co`
+        request_timeout: timeout for the underlying requests.request. Defaults to 60s. Set to None to disable the timeout.
         """
+        self.timeout = request_timeout
         self.host = self._construct_base_url(tulip_url, use_full_url)
 
         self.auth = TulipAPI._provide_api_credentials(
@@ -52,6 +55,7 @@ class TulipAPI:
                 params=params,
                 json=json,
                 headers=self.headers,
+                timeout=self.timeout,
             )
         )
 

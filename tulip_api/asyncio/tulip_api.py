@@ -1,6 +1,6 @@
 import os
 from base64 import b64encode
-from typing import Any, Union
+from typing import Any, Optional
 
 import aiohttp
 
@@ -19,21 +19,24 @@ class TulipAPI:
     """
     Asynio enabled
 
-    Wraps the `self.session.` function with authentication, response processing, and base url construction.
+    Wraps the `aiohttp.request` function with authentication, response processing, and base url construction.
     """
 
     def __init__(
         self,
         tulip_url: str,
         concurrency: int = 40,
-        api_key: Union[str, None] = None,
-        api_key_secret: Union[str, None] = None,
-        auth: Union[str, None] = None,
+        api_key: Optional[str] = None,
+        api_key_secret: Optional[str] = None,
+        auth: Optional[str] = None,
         use_full_url: bool = False,
+        request_timeout: Optional[int] = 60,
     ):
         """
         use_full_url: if set to true, the tulip_url must include `http://` or `https://` as well as the fqdn. For example `https://abc.tulip.co`
+        request_timeout: timeout for the underlying aiohttp request. Defaults to 60s. Set to None to disable the timeout.
         """
+        self.timeout = request_timeout
         self.host = self._construct_base_url(tulip_url, use_full_url)
 
         self.auth = TulipAPI._provide_api_credentials(
@@ -54,7 +57,7 @@ class TulipAPI:
         self,
         path: str,
         method: str,
-        params: Union[dict, None] = None,
+        params: Optional[dict] = None,
         json: Any = None,
     ):
         """
@@ -67,6 +70,7 @@ class TulipAPI:
             json=json,
             headers=self.headers,
             connector=self.connector,
+            timeout=self.timeout,
         ) as response:
             return await self._handle_api_response(response).json()
 
@@ -74,7 +78,7 @@ class TulipAPI:
         self,
         path: str,
         method: str,
-        params: Union[dict, None] = None,
+        params: Optional[dict] = None,
         json: Any = None,
     ):
         """
@@ -91,9 +95,9 @@ class TulipAPI:
 
     @staticmethod
     def _provide_api_credentials(
-        api_key: Union[str, None] = None,
-        api_key_secret: Union[str, None] = None,
-        auth: Union[str, None] = None,
+        api_key: Optional[str] = None,
+        api_key_secret: Optional[str] = None,
+        auth: Optional[str] = None,
     ):
         if auth:
             return auth
